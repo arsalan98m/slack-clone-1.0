@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Login from "./components/Login";
+import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
+import Chat from "./components/Chat";
+
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { useStateValue } from "./GlobalState/StateProvider";
 
 function App() {
+  const [{ user }, dispatch] = useStateValue();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Router>
+        {!user ? (
+          <Login />
+        ) : (
+          <>
+            <Header />
+            <div className="app__body">
+              <Sidebar />
+              <Switch>
+                <Route exact path="/">
+                  <h1>Welcome to Slack Clone</h1>
+                </Route>
+                <Route path="/room/:roomId">
+                  <Chat />
+                </Route>
+              </Switch>
+            </div>
+          </>
+        )}
+      </Router>
     </div>
   );
 }
